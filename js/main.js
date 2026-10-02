@@ -213,6 +213,65 @@ document.addEventListener('DOMContentLoaded', () => {
   const viewDetailBtns = document.querySelectorAll('.view-details-btn');
 
   const projectData = {
+    jobconnect: {
+  title: 'JobConnect',
+  category: 'Full-Stack Job & Recruitment Platform',
+  description:
+    'A full-stack job and recruitment platform designed to connect candidates with opportunities through job discovery, application workflows, and real-time notifications.',
+  architecture: [
+    'Frontend: React.js application providing responsive interfaces for job discovery, applications, and user interactions.',
+    'Backend: Node.js and Express.js REST API handling authentication, jobs, applications, and platform workflows.',
+    'Database: MongoDB for persistent storage of users, jobs, applications, and related platform data.',
+    'Real-Time Layer: Socket.IO for real-time notifications and event-driven communication between users and the platform.',
+  ],
+  features: [
+    'Job discovery and application management workflow.',
+    'Real-time notifications powered by Socket.IO.',
+    'RESTful APIs for users, jobs, and application-related operations.',
+    'Responsive interface designed for a smooth candidate experience.',
+  ],
+  tags: [
+    'React.js',
+    'Node.js',
+    'Express.js',
+    'MongoDB',
+    'Socket.IO',
+    'REST APIs',
+  ],
+  repo: 'https://github.com/Abhishekjain999',
+},
+
+devcollab: {
+  title: 'DevCollab',
+  category: 'Real-Time Collaborative Coding Platform',
+  description:
+    'A real-time collaborative coding platform that enables developers to work together in shared coding environments with synchronized editors, multi-user collaboration, and integrated code execution.',
+  architecture: [
+    'Frontend: React 18 application with an interactive collaborative coding interface.',
+    'Editor: Monaco Editor integration providing an IDE-style code editing experience.',
+    'Real-Time Layer: Socket.IO synchronizes coding activity and editor changes between connected users.',
+    'Backend: Node.js and Express.js services managing sessions, authentication, and collaboration workflows.',
+    'Database: MongoDB for persistent storage of users and collaborative session-related data.',
+    'Security: JWT-based authentication with bcrypt for secure password handling.',
+  ],
+  features: [
+    'Real-time multi-user collaborative coding sessions.',
+    'Synchronized Monaco Editor for shared code editing.',
+    'Multi-language code execution environment.',
+    'JWT authentication and secure user management.',
+    'Socket.IO-based real-time communication.',
+  ],
+  tags: [
+    'React 18',
+    'Node.js',
+    'Socket.IO',
+    'Monaco Editor',
+    'MongoDB',
+    'JWT',
+    'bcrypt',
+  ],
+  repo: 'https://github.com/Abhishekjain999',
+},
     blog: {
       title: 'Full-Stack Blog Application',
       category: 'MERN Stack (MongoDB, Express.js, React.js, Node.js)',
