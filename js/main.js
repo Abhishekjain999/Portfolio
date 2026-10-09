@@ -493,52 +493,159 @@ devcollab: {
     });
   });
 
-  // --- 11. CONTACT FORM SIMULATION ---
+  // --- 11. CONTACT FORM HANDLER (FORMSUBMIT DIRECT EMAIL DELIVERY) ---
   const contactForm = document.getElementById('contactForm');
   const submitBtn = document.getElementById('submitBtn');
+  const formStatus = document.getElementById('formStatus');
+
+  const PORTFOLIO_RECIPIENT_EMAIL = '00abhishjain@gmail.com';
+  const FORMSUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${PORTFOLIO_RECIPIENT_EMAIL}`;
+
+  function getContactFormData() {
+    const name = document.getElementById('contactName')?.value.trim() || '';
+    const email = document.getElementById('contactEmail')?.value.trim() || '';
+    const subject = document.getElementById('contactSubject')?.value.trim() || '';
+    const message = document.getElementById('contactMessage')?.value.trim() || '';
+    return { name, email, subject, message };
+  }
+
+  function validateContactFormData(data) {
+    if (!data.name || !data.email || !data.subject || !data.message) {
+      showToast('Please fill out all required fields before sending.', 'info');
+      setFormStatus('Please complete all form fields.', 'error');
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(data.email)) {
+      showToast('Please enter a valid email address.', 'error');
+      setFormStatus('Please provide a valid email address.', 'error');
+      return false;
+    }
+
+    return true;
+  }
+
+  function setFormStatus(message, type = 'info') {
+    if (!formStatus) return;
+    if (!message) {
+      formStatus.style.display = 'none';
+      formStatus.innerHTML = '';
+      return;
+    }
+
+    let icon = 'fa-circle-info';
+    if (type === 'success') icon = 'fa-circle-check';
+    if (type === 'error') icon = 'fa-circle-xmark';
+
+    formStatus.className = `form-status-alert ${type}`;
+    formStatus.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+    formStatus.style.display = 'flex';
+  }
+
+  async function handleContactSubmit(e) {
+    e.preventDefault();
+    const data = getContactFormData();
+    if (!validateContactFormData(data)) return;
+
+    // Button loading state
+    const btnText = submitBtn?.querySelector('.btn-text');
+    const btnSpinner = submitBtn?.querySelector('.btn-spinner');
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      if (btnText && btnSpinner) {
+        btnText.style.display = 'none';
+        btnSpinner.style.display = 'inline-flex';
+      }
+    }
+    setFormStatus('');
+
+    // Fallback if accessed via local file:// protocol where FormSubmit AJAX is blocked by browser/service
+    if (window.location.protocol === 'file:') {
+      const formattedSubject = `[Portfolio] ${data.subject}`;
+      const formattedBody = `Hi Abhishek,\n\n${data.message}\n\n----------------------------------------\nSender: ${data.name}\nEmail: ${data.email}\n----------------------------------------`;
+      const mailtoUrl = `mailto:${PORTFOLIO_RECIPIENT_EMAIL}?subject=${encodeURIComponent(formattedSubject)}&body=${encodeURIComponent(formattedBody)}`;
+
+      showToast('Opening your email client with your message pre-filled (file:// preview mode)...', 'info', 5000);
+      window.location.href = mailtoUrl;
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        if (btnText && btnSpinner) {
+          btnText.style.display = 'inline-flex';
+          btnSpinner.style.display = 'none';
+        }
+      }
+      return;
+    }
+
+    try {
+      const response = await fetch(FORMSUBMIT_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          _subject: `[Portfolio Inquiry] ${data.subject} - from ${data.name}`,
+          message: data.message,
+          _captcha: 'false',
+          _template: 'table'
+        })
+      });
+
+      const result = await response.json();
+
+      if (response.ok && (result.success === true || result.success === 'true')) {
+        contactForm.reset();
+        showToast(`Thank you, ${data.name}! Your message has been sent directly to Abhishek's email.`, 'success', 6000);
+        setFormStatus(`Your message has been sent successfully! Abhishek will reply to ${data.email} soon.`, 'success');
+      } else if (result.message && result.message.toLowerCase().includes('activation')) {
+        // FormSubmit one-time activation notice
+        showToast('Form submitted! Please check 00abhishjain@gmail.com and click the one-time activation link.', 'info', 8000);
+        setFormStatus('Message received! A one-time activation email was sent to 00abhishjain@gmail.com to approve submissions.', 'info');
+        contactForm.reset();
+      } else {
+        throw new Error(result.message || 'Server error occurred.');
+      }
+    } catch (error) {
+      console.error('Contact form submission error:', error);
+      showToast('Unable to send message directly. Please email at 00abhishjain@gmail.com', 'error', 6000);
+      setFormStatus(
+        `Failed to send message automatically. Please reach out directly at <a href="mailto:${PORTFOLIO_RECIPIENT_EMAIL}">${PORTFOLIO_RECIPIENT_EMAIL}</a>.`,
+        'error'
+      );
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        if (btnText && btnSpinner) {
+          btnText.style.display = 'inline-flex';
+          btnSpinner.style.display = 'none';
+        }
+      }
+    }
+  }
 
   if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const name = document.getElementById('contactName').value.trim();
-      const email = document.getElementById('contactEmail').value.trim();
-      const subject = document.getElementById('contactSubject').value.trim();
-      const message = document.getElementById('contactMessage').value.trim();
-
-      if (!name || !email || !subject || !message) {
-        showToast('Please fill out all required fields.', 'info');
-        return;
-      }
-
-      // Show spinner state
-      const btnText = submitBtn.querySelector('.btn-text');
-      const btnSpinner = submitBtn.querySelector('.btn-spinner');
-
-      btnText.style.display = 'none';
-      btnSpinner.style.display = 'inline-flex';
-      submitBtn.disabled = true;
-
-      // Simulate sending
-      setTimeout(() => {
-        btnText.style.display = 'inline-flex';
-        btnSpinner.style.display = 'none';
-        submitBtn.disabled = false;
-
-        showToast(`Thank you, ${name}! Your message has been sent successfully.`, 'success');
-        contactForm.reset();
-      }, 1200);
-    });
+    contactForm.addEventListener('submit', handleContactSubmit);
   }
 
   // --- 12. TOAST NOTIFICATION HELPER ---
-  function showToast(message, type = 'success') {
+  function showToast(message, type = 'success', duration = 3800) {
     const toastContainer = document.getElementById('toastContainer');
     if (!toastContainer) return;
 
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
-    const iconClass = type === 'success' ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-info';
+    let iconClass = 'fa-solid fa-circle-check';
+    if (type === 'error') {
+      iconClass = 'fa-solid fa-circle-xmark';
+    } else if (type === 'info') {
+      iconClass = 'fa-solid fa-circle-info';
+    }
 
     toast.innerHTML = `
       <i class="${iconClass}"></i>
@@ -554,7 +661,7 @@ devcollab: {
       setTimeout(() => {
         toast.remove();
       }, 400);
-    }, 3500);
+    }, duration);
   }
 
   // --- 13. CURRENT YEAR HELPER ---

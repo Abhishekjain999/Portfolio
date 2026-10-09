@@ -1657,6 +1657,90 @@ h1, h2, h3, h4, h5, h6 {
   min-height: 120px;
 }
 
+/* Contact Form Status Alert */
+.form-status-alert {
+  margin-top: 18px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.form-status-alert i {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.form-status-alert.success {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #34d399;
+}
+
+.form-status-alert.error {
+  background: rgba(244, 63, 94, 0.12);
+  border: 1px solid rgba(244, 63, 94, 0.35);
+  color: #fb7185;
+}
+
+.form-status-alert.info {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+}
+
+.form-status-alert a {
+  color: inherit;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.form-direct-hint {
+  margin-top: 16px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.form-direct-hint i {
+  color: #10b981;
+  font-size: 0.85rem;
+}
+
+.form-direct-hint span {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.btn-spinner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
 /* ==========================================================================
    Footer
    ========================================================================== */
@@ -1924,6 +2008,19 @@ h1, h2, h3, h4, h5, h6 {
 
 .toast-success i { color: #10b981; font-size: 1.1rem; }
 .toast-info i { color: #38bdf8; font-size: 1.1rem; }
+.toast-error i { color: #f43f5e; font-size: 1.1rem; }
+
+.toast a {
+  color: #38bdf8;
+  text-decoration: underline;
+  margin-left: 6px;
+  font-weight: 600;
+  transition: var(--transition-fast);
+}
+
+.toast a:hover {
+  color: #818cf8;
+}
 
 @keyframes slideInToast {
   to { transform: translateX(0); }

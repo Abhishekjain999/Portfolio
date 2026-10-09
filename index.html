@@ -1088,7 +1088,11 @@
           <!-- Contact Form -->
           <div class="contact-form-col">
             <div class="contact-form-card glass-panel">
-              <form id="contactForm" novalidate>
+              <form id="contactForm" action="https://formsubmit.co/00abhishjain@gmail.com" method="POST" novalidate>
+                <!-- FormSubmit Configuration -->
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+
                 <div class="form-row">
                   <div class="form-group">
                     <label for="contactName"><i class="fa-solid fa-user"></i> Your Name</label>
@@ -1112,8 +1116,15 @@
 
                 <button type="submit" class="btn btn-lg btn-primary btn-block" id="submitBtn">
                   <span class="btn-text"><i class="fa-solid fa-paper-plane"></i> Send Message</span>
-                  <span class="btn-spinner" style="display: none;"><i class="fa-solid fa-spinner fa-spin"></i> Sending...</span>
+                  <span class="btn-spinner" style="display: none;"><i class="fa-solid fa-spinner fa-spin"></i> Sending Message...</span>
                 </button>
+
+                <!-- Form Feedback Status Banner -->
+                <div class="form-status-alert" id="formStatus" style="display: none;" role="alert"></div>
+
+                <p class="form-direct-hint">
+                  <i class="fa-solid fa-circle-check"></i> Messages are delivered directly to <span>00abhishjain@gmail.com</span>
+                </p>
               </form>
             </div>
           </div>
